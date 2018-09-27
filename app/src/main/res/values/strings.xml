@@ -1,4 +1,28 @@
 <resources>
     <string name="app_name">Laboratorio02</string>
     <string name="main_titulo">Menu de opciones</string>
+    <string name="category">Seleccionar una categoria</string>
+    <string name="productList">Lista de productos</string>
+    <string name="quantity">Cantidad a pedir</string>
+    <string name="productData">Datos del pedido</string>
+    <string name="email">Correo electrónico</string>
+    <string name="me">Modo de entrega</string>
+    <string name="shipingAdress">Dirección de envío</string>
+    <string name="hour">Hora solicitada (HH:MM)</string>
+    <string name="rl">Retira en local</string>
+    <string name="dp">Datos del pedido</string>
+    <string name="ed">Enviar a domicilio</string>
+    <string name="agPd">Agregar producto</string>
+    <string name="quitarPedido">Quitar producto</string>
+    <string name="hacerPedido">Hacer pedido</string>
+    <string name="back">Volver</string>
+    <string name="totalPedido">Total de pedido</string>
+    <string name="pedidoRealizados">Pedidos realizados</string>
+    <string name="contacto">Contacto: </string>
+    <string name="fechaEntrega">Fecha de entrega: </string>
+    <string name="items">Items: </string>
+    <string name="estado">Estado: </string>
+    <string name="cancelar">Cancelar</string>
+
+
 </resources>
