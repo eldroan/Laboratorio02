@@ -7,4 +7,164 @@
     android:orientation="vertical"
     tools:context=".AltaProductoActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dp" />
+
+            <TextView
+                android:id="@+id/lblEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/email" />
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/ingreseemail"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/lblModoEntrega"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/me" />
+
+            <RadioGroup
+                android:id="@+id/rBttnGroupModoEntrega"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:checkedButton="@+id/rBttnEnviaDomicilio">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rBttnEnviaDomicilio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/ed" />
+
+                    <RadioButton
+                        android:id="@+id/rBttnRetiraLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/rl" />
+                </LinearLayout>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/lblDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/shipingAdress" />
+
+            <EditText
+                android:id="@+id/editDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/ingresedireccion"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/lblHora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hour" />
+
+            <EditText
+                android:id="@+id/editHora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/ingresehora"
+                android:inputType="textPersonName" />
+
+            <ListView
+                android:id="@+id/lViewPedido"
+                android:layout_width="match_parent"
+                android:layout_height="127dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/bttnAgregarProducto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/agPd"
+                    style="?android:attr/borderlessButtonStyle"/>
+
+                <Button
+                    android:id="@+id/bttnQuitarProducto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quitarPedido"
+                    style="?android:attr/borderlessButtonStyle"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/lblTotalPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/totalPedido" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bttnHacerPedido"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.73"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:text="@string/hacerPedido" />
+
+                <Button
+                    android:id="@+id/bttnVolver"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/back" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </android.widget.LinearLayout>
