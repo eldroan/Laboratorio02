@@ -1,5 +1,6 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -19,10 +20,20 @@ public class ProductList extends AppCompatActivity {
     private Spinner cmbProductosCategoria;
     private TextView categoria;
     private ListView listaProductos;
+    private EditText quantity;
+    private Button agregarPedido;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        Bundle myBundle = getIntent().getExtras();
+        int nuevopedido = 0;
+        if(myBundle.containsKey("NUEVO_PEDIDO")){
+            nuevopedido = myBundle.getInt("NUEVO_PEDIDO");
+        }
+
 
         ProductoRepository repo = new ProductoRepository();
 
@@ -43,8 +54,13 @@ public class ProductList extends AppCompatActivity {
         cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
         categoria = (TextView) findViewById(R.id.textView2);
         listaProductos = (ListView) findViewById(R.id.lstProductos);
+        quantity = (EditText) findViewById(R.id.editTextCantidad);
+        agregarPedido = (Button) findViewById(R.id.buttonAgregarPedido);
 
-
+        if(nuevopedido != 1){
+            agregarPedido.setEnabled(false);
+            quantity.setEnabled(false);
+        }
 
         cmbProductosCategoria.setAdapter(adaptador);
         cmbProductosCategoria.setOnItemSelectedListener(
