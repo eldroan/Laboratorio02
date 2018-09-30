@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, ProductList.class);
+                i.putExtra("NUEVO_PEDIDO",0);
                 startActivity(i);
             }
         });
