@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -137,6 +139,73 @@ public class AltaProductoActivity extends AppCompatActivity {
 
             }
         });
+        bttnHacerPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hora =0;
+                int minutos =0;
+                boolean error = false;
+                StringBuilder errorSB = new StringBuilder();
+
+                if(editMail.getText().length() == 0){
+                    error = true;
+                    errorSB.append("El campo de email no puede ser vacio \n");
+                }
+
+                if(rBttnEnvioDomicilio.isChecked() && editDireccion.getText().length() == 0){
+                    error = true;
+                    errorSB.append("La dirección no puede ser vacia para un envio a domicilio\n");
+                }
+
+                if(editHora.getText().length() ==0){
+                    error = true;
+                    errorSB.append("El campo de hora no puede ser vacio \n");
+                }else{
+                    try{
+                        String[] splittedHora = editHora.getText().toString().split(":");
+                        hora = Integer.parseInt(splittedHora[0]);
+                        minutos = Integer.parseInt(splittedHora[1]);
+                        if(hora >23 || hora <0){
+                            error = true;
+                            errorSB.append("La hora no puede ser mayor a 23 o menor que 0");
+                        }
+                        if(minutos > 59 || minutos < 0){
+                            error = true;
+                            errorSB.append("Los minutos no pueden ser mayor a 59 o menores que 0");
+                        }
+                    }catch(Exception ex){
+                        error = true;
+                        errorSB.append("La hora debe escribirse en el formato hh:mm");
+                    }
+                }
+
+                if(listPosToProdId.size() == 0){
+                    error = true;
+                    errorSB.append("Debe haber almenos un producto agregado para hacer un pedido");
+                }
+
+                if(error){
+                    Toast.makeText(AltaProductoActivity.this,errorSB.toString(),Toast.LENGTH_LONG).show();
+                }else{
+                    unPedido.setMailContacto(editMail.getText().toString());
+                    if(rBttnEnvioDomicilio.isChecked()){
+                        unPedido.setDireccionEnvio(editDireccion.getText().toString());
+                    }else{
+                        unPedido.setDireccionEnvio("");
+                    }
+                    GregorianCalendar h = new GregorianCalendar();
+                    h.set(Calendar.HOUR_OF_DAY,hora);
+                    h.set(Calendar.MINUTE,minutos);
+                    h.set(Calendar.SECOND,0);
+                    unPedido.setFecha(h.getTime());
+                    unPedido.setEstado(Pedido.Estado.REALIZADO);
+                    repositorioPedido.guardarPedido(unPedido);
+
+                    //ACA PASAR A LA ACTIVAD "HISTORIAL DE PEDIDO" (PASO SIGUIENTE)
+                }
+            }
+        });
+
         bttnAgregarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +262,7 @@ public class AltaProductoActivity extends AppCompatActivity {
                     }
                     Toast.makeText(AltaProductoActivity.this,"Lista: " + sb.toString() ,Toast.LENGTH_LONG).show();
 
-                    //Para evitar que nos queden errores de redondeo 
+                    //Para evitar que nos queden errores de redondeo
                     if(listPosToProdId.size() == 0){
                         totalDePedido = 0f;
                         lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());
