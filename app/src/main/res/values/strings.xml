@@ -16,13 +16,14 @@
     <string name="quitarPedido">Quitar producto</string>
     <string name="hacerPedido">Hacer pedido</string>
     <string name="back">Volver</string>
-    <string name="totalPedido">Total de pedido</string>
+    <string name="totalPedido">Total de pedido: $</string>
     <string name="pedidoRealizados">Pedidos realizados</string>
-    <string name="contacto">Contacto: </string>
-    <string name="fechaEntrega">Fecha de entrega: </string>
+    <string name="contacto">Contacto:</string>
+    <string name="fechaEntrega">Fecha de entrega:</string>
     <string name="items">Items: </string>
     <string name="estado">Estado: </string>
     <string name="cancelar">Cancelar</string>
-
-
+    <string name="ingreseemail">Ingrese su e-mail...</string>
+    <string name="ingresedireccion">Ingrese su dirección...</string>
+    <string name="ingresehora">hh:mm</string>
 </resources>
