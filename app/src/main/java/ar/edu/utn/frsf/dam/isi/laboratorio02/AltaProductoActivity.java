@@ -78,9 +78,15 @@ public class AltaProductoActivity extends AppCompatActivity {
         //Inicializamos las variables del modelo
         repositorioProducto = new ProductoRepository();
         repositorioPedido = new PedidoRepository();
+        int idPedidoIntent = getIntent().getIntExtra("ID_PEDIDO",-1);
+        if(idPedidoIntent == -1){
+            unPedido = new Pedido();
+            totalDePedido = 0f;
+        }else{
+            unPedido = repositorioPedido.buscarPorId(idPedidoIntent);
+            totalDePedido = unPedido.total().floatValue();
+        }
 
-        unPedido = new Pedido();
-        totalDePedido = 0f;
 
         lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());
 
@@ -114,8 +120,9 @@ public class AltaProductoActivity extends AppCompatActivity {
             //Crear el adaptador para el listView de productos.
         pedidosEnDetalle = new ArrayList<String>();
         listPosToProdId = new HashMap<Integer,Integer>();
+        int index =0;
         for(PedidoDetalle pd: unPedido.getDetalle()){
-            int index =0;
+
             pedidosEnDetalle.add(pd.getProducto().getNombre() + " ($" + pd.getProducto().getPrecio() + ") "+ pd.getCantidad());
             listPosToProdId.put(index,pd.getProducto().getId());
             index++;
