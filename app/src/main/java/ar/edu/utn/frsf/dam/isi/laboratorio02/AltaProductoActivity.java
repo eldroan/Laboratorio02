@@ -218,6 +218,37 @@ public class AltaProductoActivity extends AppCompatActivity {
                     unPedido.setEstado(Pedido.Estado.REALIZADO);
                     repositorioPedido.guardarPedido(unPedido);
 
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Thread.currentThread().sleep(2000);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+
+                            List<Pedido> lista = repositorioPedido.getLista();
+
+                            for(Pedido p : lista){
+                                if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                                    p.setEstado(Pedido.Estado.ACEPTADO);
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(AltaProductoActivity.this,"Informacion de pedidos actualizada!", Toast.LENGTH_LONG).show();
+                                    //To do hacer que se actualize en el momento, porque si.
+                                }
+                            });
+
+                        }
+
+                    };
+
+                    Thread hiloMarcaRegistrada = new Thread(r);
+                    hiloMarcaRegistrada.start();
+
                     //ACA PASAR A LA ACTIVAD "HISTORIAL DE PEDIDO" (PASO SIGUIENTE)
                     Intent i = new Intent(AltaProductoActivity.this,HistorialPedidosActivity.class);
                     startActivity(i);
