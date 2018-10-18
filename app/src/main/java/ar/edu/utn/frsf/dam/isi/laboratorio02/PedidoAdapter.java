@@ -1,6 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,7 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PedidoAdapter extends ArrayAdapter<Pedido> {
 
-    private Context ctx;
+    private final Context ctx;
     private List<Pedido> listaPedidos;
 
     public PedidoAdapter(Context context, List<Pedido> objects) {
@@ -45,11 +46,16 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
             holder.textViewEstado = (TextView) convertView.findViewById(R.id.textViewEstado);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
             holder.buttonCancelar = (Button) convertView.findViewById(R.id.buttonCancelar);
+            holder.buttonDetalle = (Button) convertView.findViewById(R.id.buttonVerDetalle);
+
             holder.buttonCancelar.setOnClickListener(null);
+            holder.buttonDetalle.setOnClickListener(null);
+
             holder.buttonCancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int indice = (int) v.getTag();
+
                     Pedido pedidoSeleccionado = listaPedidos.get(indice);
                     if(pedidoSeleccionado.getEstado().equals(Pedido.Estado.REALIZADO) || pedidoSeleccionado.getEstado().equals(Pedido.Estado.ACEPTADO) || pedidoSeleccionado.getEstado().equals(Pedido.Estado.EN_PREPARACION)){
                         pedidoSeleccionado.setEstado(Pedido.Estado.CANCELADO);
@@ -59,20 +65,38 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
 
                 }
             });
-            holder.buttonDetalle = (Button) convertView.findViewById(R.id.buttonVerDetalle);
+            holder.buttonDetalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int indice = (int) v.getTag();
+
+                    Pedido pedidoSeleccionado = listaPedidos.get(indice);
+                    Intent i = new Intent(ctx, AltaProductoActivity.class);
+                    i.putExtra("ID_PEDIDO",pedidoSeleccionado.getId());
+                    ctx.startActivity(i);
+                }
+            });
             convertView.setTag(holder);
         } else {
             holder = (PedidoHolder) convertView.getTag();
         }
+        System.out.println("\nLa position fue " + position + "y el tamaño de lista de pedidos fue " + listaPedidos.size());
 
         Pedido pedido = listaPedidos.get(position);
+        System.out.print("El pedido fue null?" + (pedido == null));
 
+        holder.buttonCancelar.setTag(position);
+        holder.buttonDetalle.setTag(position);
         holder.textViewContacto.setText(pedido.getMailContacto());
         holder.textViewFechaEntrega.setText(pedido.getFecha().toString());
-        holder.textViewItems.setText(pedido.getDetalle().size());
+        holder.textViewItems.setText(String.valueOf(pedido.getDetalle().size()));
         holder.textViewAPagar.setText(pedido.total().toString());
         holder.textViewEstado.setText(pedido.getEstado().toString());
-        holder.imageView.setImageResource(pedido.getRetirar()? R.mipmap.retira : R.mipmap.envio);
+        if(pedido.getRetirar()){
+            holder.imageView.setImageResource(R.mipmap.retira);
+        }else{
+            holder.imageView.setImageResource(R.mipmap.envio);
+        }
 
         switch(pedido.getEstado()){
             case LISTO:
