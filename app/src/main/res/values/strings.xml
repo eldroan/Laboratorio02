@@ -26,4 +26,8 @@
     <string name="ingreseemail">Ingrese su e-mail...</string>
     <string name="ingresedireccion">Ingrese su dirección...</string>
     <string name="ingresehora">hh:mm</string>
+    <string name="nuevo">Nuevo</string>
+    <string name="menu">Menu</string>
+    <string name="verDetalle">Ver Detalle</string>
+
 </resources>

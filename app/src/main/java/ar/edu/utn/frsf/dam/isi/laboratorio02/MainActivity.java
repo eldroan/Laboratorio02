@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, AltaProductoActivity.class);
+                i.putExtra("ID_PEDIDO",-1);
                 startActivity(i);
             }
         });
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent();
+                Intent i = new Intent(MainActivity.this,HistorialPedidosActivity.class);
                 startActivity(i);
             }
         });

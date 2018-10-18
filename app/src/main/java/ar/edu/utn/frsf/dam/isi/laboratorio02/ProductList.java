@@ -37,6 +37,11 @@ public class ProductList extends AppCompatActivity {
         int nuevopedido = myIntent.getIntExtra("NUEVO_PEDIDO",0);
 
         quantity = (EditText) findViewById(R.id.editTextCantidad);
+        agregarPedido = (Button) findViewById(R.id.buttonAgregarPedido);
+        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
+        categoria = (TextView) findViewById(R.id.textView2);
+        listaProductos = (ListView) findViewById(R.id.lstProductos);
+
 
         if(nuevopedido != 1){
             agregarPedido.setEnabled(false);
@@ -62,11 +67,6 @@ public class ProductList extends AppCompatActivity {
 
         final ArrayAdapter<String> adaptadorListView = new ArrayAdapter<String>(ProductList.this, android.R.layout.simple_list_item_single_choice, prodString);
 
-
-
-        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
-        categoria = (TextView) findViewById(R.id.textView2);
-        listaProductos = (ListView) findViewById(R.id.lstProductos);
         listaProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         //listaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         //    @Override
@@ -75,7 +75,6 @@ public class ProductList extends AppCompatActivity {
         //    }
         //});
 
-        agregarPedido = (Button) findViewById(R.id.buttonAgregarPedido);
         final HashMap<Integer,Integer> listPosToProdId = new HashMap<Integer,Integer>();
         agregarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
