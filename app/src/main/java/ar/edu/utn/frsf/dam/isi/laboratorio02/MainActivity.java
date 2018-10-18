@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        
         btnHistorial = (Button) findViewById(R.id.btnHistorialPedidos);
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
