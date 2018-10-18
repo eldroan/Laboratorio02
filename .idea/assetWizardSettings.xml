@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="52" />
+                                                <entry key="scalingPercent" value="47" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,11 +34,11 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/shop.png" />
-                                      <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="imageRetira" />
+                                      <entry key="backgroundColor" value="f4f4f8" />
+                                      <entry key="backgroundLayerName" value="enviobackground" />
+                                      <entry key="foregroundImage" value="C:\Users\leand\Downloads\package.png" />
+                                      <entry key="foregroundLayerName" value="envioforeground" />
+                                      <entry key="outputName" value="envio" />
                                     </map>
                                   </option>
                                 </PersistentState>
