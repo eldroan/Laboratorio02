@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -85,6 +86,13 @@ public class AltaProductoActivity extends AppCompatActivity {
         }else{
             unPedido = repositorioPedido.buscarPorId(idPedidoIntent);
             totalDePedido = unPedido.total().floatValue();
+            editMail.setText(unPedido.getMailContacto());
+            editDireccion.setText(unPedido.getDireccionEnvio());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            editHora.setText(sdf.format(unPedido.getFecha()));
+            rBttnEnvioDomicilio.setChecked(!unPedido.getRetirar());
+            rBttnRetiraLocal.setChecked(unPedido.getRetirar());
+
         }
 
 
@@ -197,8 +205,10 @@ public class AltaProductoActivity extends AppCompatActivity {
                     unPedido.setMailContacto(editMail.getText().toString());
                     if(rBttnEnvioDomicilio.isChecked()){
                         unPedido.setDireccionEnvio(editDireccion.getText().toString());
+                        unPedido.setRetirar(false);
                     }else{
                         unPedido.setDireccionEnvio("");
+                        unPedido.setRetirar(true);
                     }
                     GregorianCalendar h = new GregorianCalendar();
                     h.set(Calendar.HOUR_OF_DAY,hora);
@@ -209,6 +219,9 @@ public class AltaProductoActivity extends AppCompatActivity {
                     repositorioPedido.guardarPedido(unPedido);
 
                     //ACA PASAR A LA ACTIVAD "HISTORIAL DE PEDIDO" (PASO SIGUIENTE)
+                    Intent i = new Intent(AltaProductoActivity.this,HistorialPedidosActivity.class);
+                    startActivity(i);
+
                 }
             }
         });
