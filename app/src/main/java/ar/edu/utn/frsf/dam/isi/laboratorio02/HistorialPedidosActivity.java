@@ -1,6 +1,8 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,7 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
     private ListView lstHistorialPedido;
     private Button bttnHistorialNuevo;
     private Button bttnHistorialMenu;
+    public PedidoAdapter pa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
         bttnHistorialMenu.setOnClickListener(this);
         PedidoRepository pr = new PedidoRepository();
 
-        PedidoAdapter pa = new PedidoAdapter(this,pr.getLista());
+        pa = new PedidoAdapter(this,pr.getLista());
         lstHistorialPedido.setAdapter(pa);
 
         lstHistorialPedido.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -48,7 +51,11 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
             }
         });
 
+        BroadcastReceiver br = new EstadoPedidoReceiver();
+        IntentFilter filtro = new IntentFilter();
 
+        filtro.addAction("ESTADO_ACEPTADO");
+        getApplication().getApplicationContext().registerReceiver(br,filtro);
     }
 
     @Override

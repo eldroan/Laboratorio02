@@ -230,14 +230,21 @@ public class AltaProductoActivity extends AppCompatActivity {
                             List<Pedido> lista = repositorioPedido.getLista();
 
                             for(Pedido p : lista){
-                                if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                                if(p.getEstado().equals(Pedido.Estado.REALIZADO)){
                                     p.setEstado(Pedido.Estado.ACEPTADO);
+                                    Intent i = new Intent();
+                                    i.putExtra("idPedido",p.getId());
+                                    i.setAction("ESTADO_ACEPTADO");
+                                    sendBroadcast(i);
+
+                                }
                             }
 
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(AltaProductoActivity.this,"Informacion de pedidos actualizada!", Toast.LENGTH_LONG).show();
+
+                                    //Toast.makeText(AltaProductoActivity.this,"Informacion de pedidos actualizada!", Toast.LENGTH_LONG).show();
                                     //To do hacer que se actualize en el momento, porque si.
                                 }
                             });
