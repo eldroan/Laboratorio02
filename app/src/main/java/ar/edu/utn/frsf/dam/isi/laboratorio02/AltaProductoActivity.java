@@ -222,7 +222,7 @@ public class AltaProductoActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try{
-                                Thread.currentThread().sleep(2000);
+                                Thread.currentThread().sleep(10000);
                             }catch (InterruptedException e){
                                 e.printStackTrace();
                             }
