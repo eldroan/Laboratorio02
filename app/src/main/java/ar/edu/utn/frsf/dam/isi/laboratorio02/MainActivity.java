@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.common.primitives.Chars;
-
-import java.nio.charset.Charset;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PrepararPedidoService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
         btnPrepararPedidos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /*lanzar un servicio Intent service
-                        Intent nuevoServicio = new Intent(MainActivity.this, MyIntentService.class);
-                        startService(nuevoServicio);*/
 
+
+                        Intent nuevoServicio = new Intent(MainActivity.this, PrepararPedidoService.class);
+                        startService(nuevoServicio);
                     }
                 }
         );
