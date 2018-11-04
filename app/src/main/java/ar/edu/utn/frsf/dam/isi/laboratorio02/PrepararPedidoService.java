@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
+package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.IntentService;
 import android.content.BroadcastReceiver;
@@ -8,8 +8,8 @@ import android.os.IBinder;
 
 import java.util.List;
 
-import ar.edu.utn.frsf.dam.isi.laboratorio02.EstadoPedidoReceiver;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
 public class PrepararPedidoService extends IntentService {
     public PrepararPedidoService() {
@@ -36,7 +36,7 @@ public class PrepararPedidoService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            Thread.sleep(20000);
+            Thread.sleep(10000);
             PedidoRepository rp = new PedidoRepository();
             List<Pedido> listaPedido = rp.getLista();
             for (Pedido p:listaPedido) {
@@ -44,7 +44,7 @@ public class PrepararPedidoService extends IntentService {
                     p.setEstado(Pedido.Estado.EN_PREPARACION);
                     Intent i = new Intent();
                     i.putExtra("idPedido",p.getId());
-                    i.setAction("ESTADO_ACEPTADO");
+                    i.setAction("ESTADO_EN_PREPARACION");
                     sendBroadcast(i);
                 }
             }

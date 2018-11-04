@@ -21,7 +21,7 @@
         <activity android:name=".HistorialPedidosActivity" />
 
         <service
-            android:name=".modelo.PrepararPedidoService"
+            android:name=".PrepararPedidoService"
             android:enabled="true"
             android:exported="true"></service>
     </application>
