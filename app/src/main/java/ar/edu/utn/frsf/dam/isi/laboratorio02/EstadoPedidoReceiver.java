@@ -76,6 +76,20 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
                 NotificationManagerCompat enPreparacionNotificationManager = NotificationManagerCompat.from(context);
                 enPreparacionNotificationManager.notify(99, enPreparacionNotificacion.build());
                 break;
+            case "ESTADO_LISTO":
+
+                NotificationCompat.Builder listoNotificacion = new NotificationCompat.Builder(context, "CANAL01")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("Tu pedido se encuentra listo")
+                        .setContentText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
+                        .setAutoCancel(true);
+
+                NotificationManagerCompat listoNotificationManager = NotificationManagerCompat.from(context);
+                listoNotificationManager.notify(99, listoNotificacion.build());
+                break;
+
 
         }
     }
