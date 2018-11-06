@@ -18,7 +18,12 @@
         </activity>
         <activity android:name=".ProductList" />
         <activity android:name=".AltaProductoActivity" />
-        <activity android:name=".HistorialPedidosActivity"></activity>
+        <activity android:name=".HistorialPedidosActivity" />
+
+        <service
+            android:name=".PrepararPedidoService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
