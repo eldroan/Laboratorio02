@@ -29,5 +29,8 @@
     <string name="nuevo">Nuevo</string>
     <string name="menu">Menu</string>
     <string name="verDetalle">Ver Detalle</string>
+    <string name="canal_estado_nombre">Soy un nombre!</string>
+    <string name="canal_estado_descripcion">Soy una descripcion!</string>
+
 
 </resources>
