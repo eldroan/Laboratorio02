@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoriaRest {
 
@@ -80,4 +81,70 @@ public class CategoriaRest {
             if (urlConnection != null) urlConnection.disconnect();
         }
     }
+
+    // definir el método
+    public List<Categoria> listarTodas() {
+        // inicializar variables
+        List<Categoria> resultado = new ArrayList<>();
+        HttpURLConnection urlConnection = null;
+        InputStream in = null;
+        // GESTIONAR LA CONEXION
+        URL url = null;
+        try {
+            url = new URL("http://10.0.2.2:5000/categorias/");
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept-Type", "application/json");
+            urlConnection.setRequestMethod("GET");
+            // Leer la respuesta
+            in = new BufferedInputStream(urlConnection.getInputStream());
+            InputStreamReader isw = new InputStreamReader(in);
+            StringBuilder sb = new StringBuilder();
+            int data = isw.read();
+            // verificar el codigo de respuesta
+            if (urlConnection.getResponseCode() == 200 || urlConnection.getResponseCode() == 201) {
+                while (data != -1) {
+                    char current = (char) data;
+                    sb.append(current);
+                    data = isw.read();
+                }
+                // ver datos recibidos
+                Log.d("LAB_04", sb.toString());
+                // Transformar respuesta a JSON
+                JSONTokener tokener = new JSONTokener(sb.toString());
+
+                JSONArray listaCategorias = (JSONArray) tokener.nextValue();
+                // iterar todas las entradas del arreglo
+                for (int i = 0; i < listaCategorias.length(); i++){
+                    JSONObject object = listaCategorias.getJSONObject(i);
+                    Categoria cat = new Categoria();
+                    cat.setNombre(object.getString("nombre"));
+                    cat.setId(object.getInt("id"));
+                    // analizar cada element del JSONArray
+                    // armar una instancia de categoría y agregarla a la lista
+                    resultado.add(cat);
+                }
+            } else {
+                // lanzar excepcion o mostrar mensaje de error
+                // que no se pudo ejecutar la operacion
+                Log.e("ServicioRest", "Error!");
+            }
+            // NO OLVIDAR CERRAR inputStream y conexion
+            if (in != null)
+                in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+        //retornar resultado
+        return resultado;
+    }
+
 }

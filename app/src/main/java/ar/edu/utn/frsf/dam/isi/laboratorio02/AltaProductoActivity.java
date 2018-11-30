@@ -103,12 +103,8 @@ public class AltaProductoActivity extends AppCompatActivity {
             editHora.setText(sdf.format(unPedido.getFecha()));
             rBttnEnvioDomicilio.setChecked(!unPedido.getRetirar());
             rBttnRetiraLocal.setChecked(unPedido.getRetirar());
-
         }
-
-
         lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());
-
 
         //Desabilitamos/Habilitamos el edittext de direccion segun el estado del rbtton de envio a domicilio
         editDireccion.setEnabled(false);
@@ -120,8 +116,6 @@ public class AltaProductoActivity extends AppCompatActivity {
                     editDireccion.setText("");
                     editDireccion.setEnabled(false);
                 }
-
-
             }
         });
         rBttnEnvioDomicilio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -132,11 +126,10 @@ public class AltaProductoActivity extends AppCompatActivity {
                     editDireccion.setEnabled(true);
 
                 }
-
             }
         });
 
-            //Crear el adaptador para el listView de productos.
+        //Crear el adaptador para el listView de productos.
         pedidosEnDetalle = new ArrayList<String>();
         listPosToProdId = new HashMap<Integer,Integer>();
         int index =0;
@@ -147,10 +140,6 @@ public class AltaProductoActivity extends AppCompatActivity {
             index++;
         }
         Log.d("TAMANO","El tamaño fue " + pedidosEnDetalle.size());
-//        final ArrayList<String> asd = new ArrayList<String>();
-//        asd.add("uno");
-//        asd.add("dos");
-//        asd.add("tres");
         adaptadorLViewPedido = new ArrayAdapter<String>(AltaProductoActivity.this, android.R.layout.simple_list_item_single_choice, pedidosEnDetalle);
 
         lViewPedido.setAdapter(adaptadorLViewPedido);
