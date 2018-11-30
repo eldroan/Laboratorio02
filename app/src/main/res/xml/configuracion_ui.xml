@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="checkBoxRetirar"
+        android:summary="@string/retirarPorDefecto2"
+        android:title="@string/retirarPorDefecto" />
+    <EditTextPreference
+        android:defaultValue="Default value"
+        android:key="editTextEmail"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/usarPorDefecto"
+        android:title="@string/email" />
+</PreferenceScreen>
