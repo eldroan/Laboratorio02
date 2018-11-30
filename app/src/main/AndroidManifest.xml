@@ -21,21 +21,21 @@
         <activity android:name=".HistorialPedidosActivity" />
 
         <service
-        android:name=".PrepararPedidoService"
-        android:enabled="true"
-        android:exported="true"></service>
-        <service
-            android:name=".RestoMessagingService">
+            android:name=".PrepararPedidoService"
+            android:enabled="true"
+            android:exported="true" />
+        <service android:name=".RestoMessagingService">
             <intent-filter>
-                <action android:name= "com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".RestoFireBaseInstanceIdService">
+        <service android:name=".RestoFireBaseInstanceIdService">
             <intent-filter>
-                <action android:name= "com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".ConfiguracionActivity"></activity>
     </application>
 
 </manifest>

@@ -31,6 +31,10 @@
     <string name="verDetalle">Ver Detalle</string>
     <string name="canal_estado_nombre">Soy un nombre!</string>
     <string name="canal_estado_descripcion">Soy una descripcion!</string>
+    <string name="retirarPorDefecto">Retirar por defecto</string>
+    <string name="retirarPorDefecto2">El pedido es para retirar</string>
+    <string name="usarPorDefecto">Se usará por defecto</string>
+    <string name="configuracion">Configuración</string>
 
 
 </resources>

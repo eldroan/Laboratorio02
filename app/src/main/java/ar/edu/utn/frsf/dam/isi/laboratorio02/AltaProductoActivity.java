@@ -2,6 +2,8 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +58,8 @@ public class AltaProductoActivity extends AppCompatActivity {
     private HashMap<Integer,Integer> listPosToProdId;
     private Float totalDePedido;
     private String lblTotalPedidoOriginal;
+    private SharedPreferences prefs;
+
 
 
     @Override
@@ -75,6 +79,8 @@ public class AltaProductoActivity extends AppCompatActivity {
         bttnVolver = (Button) findViewById(R.id.bttnVolver);
         lblTotalPedido = (TextView) findViewById(R.id.lblTotalPedido);
         lblTotalPedidoOriginal = lblTotalPedido.getText().toString();
+        //prefs = getSharedPreferences("configuracion_ui",0);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Inicializamos las variables del modelo
         repositorioProducto = new ProductoRepository();
@@ -83,6 +89,11 @@ public class AltaProductoActivity extends AppCompatActivity {
         if(idPedidoIntent == -1){
             unPedido = new Pedido();
             totalDePedido = 0f;
+            String st = prefs.getString("editTextEmail"," ");
+            Boolean bol = prefs.getBoolean("checkBoxRetirar",false);
+            editMail.setText(prefs.getString("editTextEmail"," "));
+            rBttnRetiraLocal.setChecked(prefs.getBoolean("checkBoxRetirar",false));
+
         }else{
             unPedido = repositorioPedido.buscarPorId(idPedidoIntent);
             totalDePedido = unPedido.total().floatValue();
