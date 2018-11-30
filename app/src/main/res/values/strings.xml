@@ -35,6 +35,7 @@
     <string name="retirarPorDefecto2">El pedido es para retirar</string>
     <string name="usarPorDefecto">Se usará por defecto</string>
     <string name="configuracion">Configuración</string>
+    <string name="categorias">Categorias</string>
 
 
 </resources>

@@ -35,7 +35,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ConfiguracionActivity"></activity>
+        <activity android:name=".ConfiguracionActivity" />
+        <activity android:name=".CategoriaActivity"></activity>
     </application>
 
 </manifest>

@@ -9,7 +9,7 @@ import android.support.v7.preference.PreferenceManager;
 
 import java.util.Map;
 
-public class ConfiguracionActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ConfiguracionActivity extends AppCompatActivity  {
 
     EditTextPreference editTextEmail;
 
@@ -21,7 +21,7 @@ public class ConfiguracionActivity extends AppCompatActivity implements SharedPr
                 .replace(android.R.id.content, new ConfiguracionFragment())
                 .commit();
     }
-    
+
     public static class ConfiguracionFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
