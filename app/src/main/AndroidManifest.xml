@@ -38,7 +38,8 @@
 
         <activity android:name=".ConfiguracionActivity" />
         <activity android:name=".CategoriaActivity" />
-        <activity android:name=".GestionProductoActivity"></activity>
+        <activity android:name=".GestionProductoActivity" />
+        <activity android:name=".GestionarDBActivity"></activity>
     </application>
 
 </manifest>

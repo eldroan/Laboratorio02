@@ -50,6 +50,10 @@ public class MyRepository {
         this.categoriaDao = categoriaDao;
     }
 
+    public void clearAll(){
+        this.myDatabase.clearAllTables();
+    }
+
     public ProductoDao getProductoDao() {
         return productoDao;
     }
