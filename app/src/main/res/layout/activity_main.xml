@@ -55,4 +55,10 @@
         android:layout_height="wrap_content"
         android:text="@string/gestionarProd" />
 
+    <Button
+        android:id="@+id/btnPruebaDBLocal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="btnPruebaDBLocal" />
+
 </LinearLayout>
