@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+
 import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
@@ -20,12 +21,12 @@ public interface ProductoDao {
     Producto getForId(Integer id);
 
     @Insert
-    long insert(Producto cat);
+    long insert(Producto producto);
 
     @Update
-    void update(Producto cat);
+    void update(Producto producto);
 
     @Delete
-    void delete(Producto cat);
+    void delete(Producto producto);
 
 }
