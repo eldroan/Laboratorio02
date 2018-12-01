@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPrepararPedidos;
     private Button btnConfiguracion;
     private Button btnCategorias;
+    private Button btnGestionarProductos;
 
 
     @Override
@@ -83,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
                                                     startActivity(i);
                                                 }
                                             }
+        );
+
+        btnGestionarProductos = (Button) findViewById(R.id.btnGestionProductos);
+        btnGestionarProductos.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View view) {
+                                                 Intent i = new Intent(MainActivity.this, GestionProductoActivity.class);
+                                                 startActivity(i);
+                                             }
+                                         }
         );
     }
 

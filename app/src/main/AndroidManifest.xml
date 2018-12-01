@@ -3,10 +3,10 @@
     package="ar.edu.utn.frsf.dam.isi.laboratorio02">
 
     <application
-        android:networkSecurityConfig="@xml/security_config"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -37,7 +37,8 @@
         </service>
 
         <activity android:name=".ConfiguracionActivity" />
-        <activity android:name=".CategoriaActivity"></activity>
+        <activity android:name=".CategoriaActivity" />
+        <activity android:name=".GestionProductoActivity"></activity>
     </application>
 
 </manifest>
