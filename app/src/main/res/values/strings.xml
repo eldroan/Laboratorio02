@@ -36,6 +36,7 @@
     <string name="usarPorDefecto">Se usará por defecto</string>
     <string name="configuracion">Configuración</string>
     <string name="categorias">Categorias</string>
+    <string name="gestionarProd">Gestionar productos</string>
 
 
 </resources>
