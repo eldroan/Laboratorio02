@@ -8,6 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
+import java.util.Random;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaDao;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyDatabase;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,12 +28,19 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCategorias;
     private Button btnGestionarProductos;
 
+    private Button btnPruebaDBLocal;
+    private CategoriaDao catDao;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createNotificationChannel();
+        catDao = MyRepository.getInstance(this).getCategoriaDao();
+
+
         btnNuevoPedido = (Button) findViewById(R.id.btnMainNuevoPedido);
         btnNuevoPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
         
         btnHistorial = (Button) findViewById(R.id.btnHistorialPedidos);
         btnHistorial.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +110,44 @@ public class MainActivity extends AppCompatActivity {
                                              }
                                          }
         );
+
+        btnPruebaDBLocal = (Button) findViewById(R.id.btnPruebaDBLocal);
+        btnPruebaDBLocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Runnable r1 = new Runnable() {
+                    @Override
+                    public void run() {
+                        //Inserta una categoria
+                        Categoria c1 = new Categoria();
+                        Random r = new Random();
+                        c1.setNombre(" CAT _ " + r.nextInt(1000));
+                        catDao.insert(c1);
+                        //Muestra la lista en un toast
+                        List<Categoria> lista = catDao.getAll();
+                        final StringBuilder resultado = new StringBuilder(" === CATEGORIAS ==="+ "\r\n");
+                        for (Categoria c : lista) {
+                            resultado.append(c.getId() + ": " + c.getNombre() + "\r\n");
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this,resultado.toString(),Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                };
+                Thread t1 = new Thread(r1);
+                t1.start();
+
+
+
+
+
+            }
+        });
     }
 
     private void createNotificationChannel(){
