@@ -28,7 +28,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
@@ -48,10 +51,12 @@ public class AltaProductoActivity extends AppCompatActivity {
     private Button bttnVolver;
     private TextView lblTotalPedido;
 
-    private Pedido unPedido;
-    private PedidoRepository repositorioPedido;
-    private ProductoRepository repositorioProducto;
+    /*private PedidoRepository repositorioPedido;
+    private ProductoRepository repositorioProducto;*/
+    private ProductoDao productoDao;
+    private PedidoDao pedidoDao;
 
+    private Pedido unPedido;
     private int selectedItemInList = -1;
     private ArrayList<String> pedidosEnDetalle;
     private ArrayAdapter<String> adaptadorLViewPedido;
@@ -59,6 +64,7 @@ public class AltaProductoActivity extends AppCompatActivity {
     private Float totalDePedido;
     private String lblTotalPedidoOriginal;
     private SharedPreferences prefs;
+
 
 
 
@@ -83,8 +89,12 @@ public class AltaProductoActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Inicializamos las variables del modelo
-        repositorioProducto = new ProductoRepository();
-        repositorioPedido = new PedidoRepository();
+        /*repositorioProducto = new ProductoRepository();
+        repositorioPedido = new PedidoRepository();*/
+        productoDao = MyRepository.getInstance(this).getProductoDao();
+        pedidoDao = MyRepository.getInstance(this).getPedidoDao();
+
+
         int idPedidoIntent = getIntent().getIntExtra("ID_PEDIDO",-1);
         if(idPedidoIntent == -1){
             unPedido = new Pedido();
@@ -95,7 +105,7 @@ public class AltaProductoActivity extends AppCompatActivity {
             rBttnRetiraLocal.setChecked(prefs.getBoolean("checkBoxRetirar",false));
 
         }else{
-            unPedido = repositorioPedido.buscarPorId(idPedidoIntent);
+            unPedido = pedidoDao.getForId(idPedidoIntent);
             totalDePedido = unPedido.total().floatValue();
             editMail.setText(unPedido.getMailContacto());
             editDireccion.setText(unPedido.getDireccionEnvio());
@@ -202,21 +212,36 @@ public class AltaProductoActivity extends AppCompatActivity {
                 if(error){
                     Toast.makeText(AltaProductoActivity.this,errorSB.toString(),Toast.LENGTH_LONG).show();
                 }else{
-                    unPedido.setMailContacto(editMail.getText().toString());
-                    if(rBttnEnvioDomicilio.isChecked()){
-                        unPedido.setDireccionEnvio(editDireccion.getText().toString());
-                        unPedido.setRetirar(false);
-                    }else{
-                        unPedido.setDireccionEnvio("");
-                        unPedido.setRetirar(true);
-                    }
-                    GregorianCalendar h = new GregorianCalendar();
-                    h.set(Calendar.HOUR_OF_DAY,hora);
-                    h.set(Calendar.MINUTE,minutos);
-                    h.set(Calendar.SECOND,0);
-                    unPedido.setFecha(h.getTime());
-                    unPedido.setEstado(Pedido.Estado.REALIZADO);
-                    repositorioPedido.guardarPedido(unPedido);
+
+                    //Perdón, ya no tenía mas ganas de pensar
+                    final int parcheParaHora = hora;
+                    final int parcheParaMinutos = minutos;
+
+                    Runnable r2 = new Runnable() {
+                        @Override
+                        public void run() {
+                            unPedido.setMailContacto(editMail.getText().toString());
+                            if(rBttnEnvioDomicilio.isChecked()){
+                                unPedido.setDireccionEnvio(editDireccion.getText().toString());
+                                unPedido.setRetirar(false);
+                            }else{
+                                unPedido.setDireccionEnvio("");
+                                unPedido.setRetirar(true);
+                            }
+
+                            GregorianCalendar h = new GregorianCalendar();
+                            h.set(Calendar.HOUR_OF_DAY,parcheParaHora);
+                            h.set(Calendar.MINUTE,parcheParaMinutos);
+                            h.set(Calendar.SECOND,0);
+                            unPedido.setFecha(h.getTime());
+                            unPedido.setEstado(Pedido.Estado.REALIZADO);
+                            pedidoDao.insert(unPedido);
+
+                        }
+                    };
+                    Thread hilo = new Thread(r2);
+                    hilo.start();
+
 
                     Runnable r = new Runnable() {
                         @Override
@@ -227,11 +252,12 @@ public class AltaProductoActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            List<Pedido> lista = repositorioPedido.getLista();
+                            List<Pedido> lista = pedidoDao.getAll();
 
                             for(Pedido p : lista){
                                 if(p.getEstado().equals(Pedido.Estado.REALIZADO)){
                                     p.setEstado(Pedido.Estado.ACEPTADO);
+                                    pedidoDao.update(p);
                                     Intent i = new Intent();
                                     i.putExtra("idPedido",p.getId());
                                     i.setAction("ESTADO_ACEPTADO");
@@ -316,7 +342,7 @@ public class AltaProductoActivity extends AppCompatActivity {
 
                     StringBuilder sb = new StringBuilder();
                     for(int i = 0; i < listPosToProdId.size(); i++){
-                        sb.append("Key:" + i + " Value" + listPosToProdId.get(i) + " Nombre: " +repositorioProducto.buscarPorId(listPosToProdId.get(i)).getNombre() +", ");
+                        sb.append("Key:" + i + " Value" + listPosToProdId.get(i) + " Nombre: " +productoDao.getForId(listPosToProdId.get(i)).getNombre() +", ");
                     }
                     Toast.makeText(AltaProductoActivity.this,"Lista: " + sb.toString() ,Toast.LENGTH_LONG).show();
 
@@ -338,23 +364,43 @@ public class AltaProductoActivity extends AppCompatActivity {
         if(resultCode == Activity.RESULT_OK){
             if(requestCode == 0){
                 if(data != null){
-                    int cantidad = data.getIntExtra("cantidad",-1);
-                    int idProducto = data.getIntExtra("idProducto",-1);
 
-                    if(cantidad != -1 && idProducto != -1){
-                        Producto nuevoProducto = repositorioProducto.buscarPorId(idProducto);
-                        PedidoDetalle nuevoDetalle = new PedidoDetalle(cantidad,nuevoProducto);
+                    final int cantidad = data.getIntExtra("cantidad",-1);
+                    final int idProducto = data.getIntExtra("idProducto",-1);
 
-                        unPedido.agregarDetalle(nuevoDetalle);
-                        pedidosEnDetalle.add(nuevoProducto.getNombre() + " ($" + nuevoProducto.getPrecio() + ") "+ cantidad);
-                        adaptadorLViewPedido.notifyDataSetChanged();
-                        listPosToProdId.put(listPosToProdId.size(),idProducto);
-                        double precio = nuevoProducto.getPrecio();
-                        totalDePedido += cantidad * ((float) precio);
-                        lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());
+                    Runnable r = new Runnable(){
+                        @Override
+                        public void run() {
 
-                    }
+                            if(cantidad != -1 && idProducto != -1){
+                                Producto nuevoProducto = productoDao.getForId(idProducto);
+                                PedidoDetalle nuevoDetalle = new PedidoDetalle(cantidad,nuevoProducto);
 
+                                unPedido.agregarDetalle(nuevoDetalle);
+                                pedidosEnDetalle.add(nuevoProducto.getNombre() + " ($" + nuevoProducto.getPrecio() + ") "+ cantidad);
+
+                                double precio = nuevoProducto.getPrecio();
+                                totalDePedido += cantidad * ((float) precio);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adaptadorLViewPedido.notifyDataSetChanged();
+                                        listPosToProdId.put(listPosToProdId.size(),idProducto);
+                                        lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());
+                                    }
+                                });
+
+                                /*listPosToProdId.put(listPosToProdId.size(),idProducto);
+                                double precio = nuevoProducto.getPrecio();
+                                totalDePedido += cantidad * ((float) precio);
+                                lblTotalPedido.setText(lblTotalPedidoOriginal +" "+ totalDePedido.toString());*/
+
+                            }
+                        }
+                    };
+                    Thread t2 = new Thread(r);
+                    t2.start();
                 }
             }else{
                 //Llego otro request, re loco

@@ -18,6 +18,9 @@ public class PedidoDetalle {
     @Embedded
     private Pedido pedido;
 
+    public PedidoDetalle() {
+    }
+
     public PedidoDetalle(Integer cantidad, Producto producto) {
         id=ID_DETALLE++;
         this.cantidad = cantidad;
