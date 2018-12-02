@@ -19,6 +19,8 @@ public class MyRepository {
     private MyDatabase myDatabase;
     private CategoriaDao categoriaDao;
     private ProductoDao productoDao;
+    private PedidoDao pedidoDao;
+    private PedidoDetalleDao pedidoDetalleDao;
 
     // constructor privado para poder implementar SINGLETON
     // al ser privado solo puede ser invocado dentro de esta clase
@@ -35,6 +37,8 @@ public class MyRepository {
         //TODO agregar otras entidades acá
         categoriaDao = myDatabase.categoriaDao();
         productoDao = myDatabase.productoDao();
+        pedidoDao = myDatabase.pedidoDao();
+        pedidoDetalleDao = myDatabase.pedidoDetalleDao();
     }
 
     //TODO agregar otras entidades acá
@@ -46,11 +50,31 @@ public class MyRepository {
         this.categoriaDao = categoriaDao;
     }
 
+    public void clearAll(){
+        this.myDatabase.clearAllTables();
+    }
+
     public ProductoDao getProductoDao() {
         return productoDao;
     }
 
     public void setProductoDao(ProductoDao productoDao) {
         this.productoDao = productoDao;
+    }
+
+    public PedidoDao getPedidoDao() {
+        return pedidoDao;
+    }
+
+    public void setPedidoDao(PedidoDao pedidoDao) {
+        this.pedidoDao = pedidoDao;
+    }
+
+    public PedidoDetalleDao getPedidoDetalleDao() {
+        return pedidoDetalleDao;
+    }
+
+    public void setPedidoDetalleDao(PedidoDetalleDao pedidoDetalleDao) {
+        this.pedidoDetalleDao = pedidoDetalleDao;
     }
 }

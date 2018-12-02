@@ -13,84 +13,106 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
 
 public class EstadoPedidoReceiver extends BroadcastReceiver {
 
+    private PedidoDao pedidoDao;
+
     @Override
-    public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
+    public void onReceive( Context context, Intent intent) {
+        //Pedido p = (new PedidoRepository()).buscarPorId(intent.getIntExtra("idPedido", -1));
 
-        Pedido p = (new PedidoRepository()).buscarPorId(intent.getIntExtra("idPedido", -1));
-        SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm");
-        StringBuilder strb = new StringBuilder();
-        int i = 0;
-        for (PedidoDetalle pd : p.getDetalle()) {
-            if (i == 2)
-                break;
+        final int idPedido = intent.getIntExtra("idPedido", -1);
+        final Context finalCtx = context;
+        final String actionIntent = intent.getAction();
+        Runnable r = new Runnable(){
+            @Override
+            public void run() {
+                pedidoDao = MyRepository.getInstance(finalCtx).getPedidoDao();
+                Pedido p = pedidoDao.getForId(idPedido);
 
-            strb.append("Se pidio " + pd.getCantidad() + " de " + pd.getProducto().getNombre() + "\n");
+                SimpleDateFormat dateformat = new SimpleDateFormat("hh:mm");
+                StringBuilder strb = new StringBuilder();
+                int i = 0;
+                for (PedidoDetalle pd : p.getDetalle()) {
+                    if (i == 2)
+                        break;
 
-            i++;
-        }
-        String accion = intent.getAction();
-        switch (accion) {
-            case "ESTADO_ACEPTADO":
-                //Toast.makeText(context,"Pedido para " + p.getMailContacto() + " ha cambiado de estado a " + p.getEstado().toString(), Toast.LENGTH_LONG).show();
-                Intent toAltaProductoIntent = new Intent(context, AltaProductoActivity.class);
-                toAltaProductoIntent.putExtra("ID_PEDIDO", p.getId());
-                toAltaProductoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pi = PendingIntent.getActivity(context, 0, toAltaProductoIntent, 0);
+                    strb.append("Se pidio " + pd.getCantidad() + " de " + pd.getProducto().getNombre() + "\n");
 
-                NotificationCompat.Builder aceptadoNotification = new NotificationCompat.Builder(context, "CANAL01")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("Tu pedido fue aceptado")
-                        .setContentText("El costo será de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
-                        .setContentIntent(pi)
-                        .setAutoCancel(true);
+                    i++;
+                }
 
-                NotificationManagerCompat aceptadoNotificationManager = NotificationManagerCompat.from(context);
-                aceptadoNotificationManager.notify(99, aceptadoNotification.build());
+                switch (actionIntent) {
+                    case "ESTADO_ACEPTADO":
+                        //Toast.makeText(context,"Pedido para " + p.getMailContacto() + " ha cambiado de estado a " + p.getEstado().toString(), Toast.LENGTH_LONG).show();
+                        Intent toAltaProductoIntent = new Intent(finalCtx, AltaProductoActivity.class);
+                        toAltaProductoIntent.putExtra("ID_PEDIDO", p.getId());
+                        toAltaProductoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent pi = PendingIntent.getActivity(finalCtx, 0, toAltaProductoIntent, 0);
 
-                //((HistorialPedidosActivity)context).pa.notifyDataSetChanged();
-                break;
-            case "ESTADO_EN_PREPARACION":
-                Intent toListaPedidosIntent = new Intent(context, HistorialPedidosActivity.class);
-                toListaPedidosIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent toListaPedidosIntentPendInt = PendingIntent.getActivity(context, 0, toListaPedidosIntent, 0);
+                        NotificationCompat.Builder aceptadoNotification = new NotificationCompat.Builder(finalCtx, "CANAL01")
+                                .setSmallIcon(R.drawable.ic_launcher_background)
+                                .setContentTitle("Tu pedido fue aceptado")
+                                .setContentText("El costo será de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
+                                .setContentIntent(pi)
+                                .setAutoCancel(true);
 
-                NotificationCompat.Builder enPreparacionNotificacion = new NotificationCompat.Builder(context, "CANAL01")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("Tu pedido se encuentra en preparación")
-                        .setContentText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
-                        .setContentIntent(toListaPedidosIntentPendInt)
-                        .setAutoCancel(true);
+                        NotificationManagerCompat aceptadoNotificationManager = NotificationManagerCompat.from(finalCtx);
+                        aceptadoNotificationManager.notify(99, aceptadoNotification.build());
 
-                NotificationManagerCompat enPreparacionNotificationManager = NotificationManagerCompat.from(context);
-                enPreparacionNotificationManager.notify(99, enPreparacionNotificacion.build());
-                break;
-            case "ESTADO_LISTO":
+                        //((HistorialPedidosActivity)context).pa.notifyDataSetChanged();
+                        break;
+                    case "ESTADO_EN_PREPARACION":
+                        Intent toListaPedidosIntent = new Intent(finalCtx, HistorialPedidosActivity.class);
+                        toListaPedidosIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent toListaPedidosIntentPendInt = PendingIntent.getActivity(finalCtx, 0, toListaPedidosIntent, 0);
 
-                NotificationCompat.Builder listoNotificacion = new NotificationCompat.Builder(context, "CANAL01")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("Tu pedido se encuentra listo")
-                        .setContentText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
-                        .setAutoCancel(true);
+                        NotificationCompat.Builder enPreparacionNotificacion = new NotificationCompat.Builder(finalCtx, "CANAL01")
+                                .setSmallIcon(R.drawable.ic_launcher_background)
+                                .setContentTitle("Tu pedido se encuentra en preparación")
+                                .setContentText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
+                                .setContentIntent(toListaPedidosIntentPendInt)
+                                .setAutoCancel(true);
 
-                NotificationManagerCompat listoNotificationManager = NotificationManagerCompat.from(context);
-                listoNotificationManager.notify(99, listoNotificacion.build());
-                break;
+                        NotificationManagerCompat enPreparacionNotificationManager = NotificationManagerCompat.from(finalCtx);
+                        enPreparacionNotificationManager.notify(99, enPreparacionNotificacion.build());
+                        break;
+                    case "ESTADO_LISTO":
+
+                        NotificationCompat.Builder listoNotificacion = new NotificationCompat.Builder(finalCtx, "CANAL01")
+                                .setSmallIcon(R.drawable.ic_launcher_background)
+                                .setContentTitle("Tu pedido se encuentra listo")
+                                .setContentText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()))
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText("El costo seá de $" + p.total().toString() + "\n Previsto el envio para " + dateformat.format(p.getFecha()) + "\n" + strb.toString()))
+                                .setAutoCancel(true);
+
+                        NotificationManagerCompat listoNotificationManager = NotificationManagerCompat.from(finalCtx);
+                        listoNotificationManager.notify(99, listoNotificacion.build());
+                        break;
 
 
-        }
+                }
+
+            }
+        };
+        Thread t2 = new Thread(r);
+        t2.start();
+
+
+
+
+
+
     }
 }

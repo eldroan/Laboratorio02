@@ -1,6 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.List;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 
@@ -19,6 +24,8 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
     private Button bttnHistorialNuevo;
     private Button bttnHistorialMenu;
     public PedidoAdapter pa;
+    private PedidoDao pedidoDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +37,28 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
         bttnHistorialNuevo = (Button) findViewById(R.id.bttnHistorialNuevo);
         bttnHistorialNuevo.setOnClickListener(this);
         bttnHistorialMenu.setOnClickListener(this);
-        PedidoRepository pr = new PedidoRepository();
+        pedidoDao = MyRepository.getInstance(this).getPedidoDao();
 
-        pa = new PedidoAdapter(this,pr.getLista());
-        lstHistorialPedido.setAdapter(pa);
+        //PedidoRepository pr = new PedidoRepository();
+        final Context ctx = this;
+
+        Runnable r = new Runnable(){
+            @Override
+            public void run() {
+                final List<Pedido> listaPedidos = pedidoDao.getAll();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pa = new PedidoAdapter(ctx,listaPedidos);
+                        lstHistorialPedido.setAdapter(pa);
+                    }
+                });
+
+            }
+        };
+        Thread t1 = new Thread(r);
+        t1.start();
 
         lstHistorialPedido.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -45,8 +70,6 @@ public class HistorialPedidosActivity extends AppCompatActivity implements View.
                 Intent i = new Intent(HistorialPedidosActivity.this, AltaProductoActivity.class);
                 i.putExtra("ID_PEDIDO",idpedido);
                 startActivity(i);
-
-
                 return true;
             }
         });

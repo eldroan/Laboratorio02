@@ -15,6 +15,10 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaDao;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.MyRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoDao;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.CategoriaRest;
@@ -30,6 +34,9 @@ public class ProductList extends AppCompatActivity {
     ArrayAdapter<String> categoriasAdapter;
     ArrayAdapter<String> productosAdapter;
 
+    private ProductoDao productoDao;
+    private CategoriaDao categoriaDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,18 +50,20 @@ public class ProductList extends AppCompatActivity {
         listaProductos = (ListView) findViewById(R.id.lstProductos);
         listaProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+        //Inicializamos las variables del modelo
+        productoDao = MyRepository.getInstance(this).getProductoDao();
+        categoriaDao = MyRepository.getInstance(this).getCategoriaDao();
+
         Runnable r = new Runnable() {
             @Override
             public void run() {
 
-                ProductoRepository repoProductos = new ProductoRepository();
-                CategoriaRest catRest = new CategoriaRest();
-                Categoria[] categorias = catRest.listarTodas().toArray(new Categoria[0]);
+                List<Categoria> categorias = categoriaDao.getAll();
                 final List<String> catString = new ArrayList<String>();
                 for(Categoria c : categorias){
                     catString.add(c.toString());
                 }
-                final List<Producto> prodList = repoProductos.getLista();
+                final List<Producto> prodList = productoDao.getAll();
                 final List<String> prodString = new ArrayList<String>();
 
                 runOnUiThread(new Runnable() {
@@ -101,11 +110,13 @@ public class ProductList extends AppCompatActivity {
                                 prodString.clear();
                                 listaProductos.setAdapter(productosAdapter);
                                 int index =0;
-                                for(Producto p : prodList){
-                                    if(p.getCategoria().toString().equals(adapterView.getItemAtPosition(position).toString())){
-                                        prodString.add(p.toString());
-                                        listPosToProdId.put(index,p.getId());
-                                        index++;
+                                if(!prodList.isEmpty()){
+                                    for(Producto p : prodList){
+                                        if(p.getCategoria().toString().equals(adapterView.getItemAtPosition(position).toString())){
+                                            prodString.add(p.toString());
+                                            listPosToProdId.put(index,p.getId());
+                                            index++;
+                                        }
                                     }
                                 }
                             }
